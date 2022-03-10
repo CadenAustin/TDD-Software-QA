@@ -5,13 +5,13 @@ use super::*;
 fn bmi_calc_test() {
     let test_input = BmiInput {
         h_feet: 5,
-        h_inch: 6,
-        weight: 180.0,
+        h_inch: 3,
+        weight: 125.0,
     };
 
     let test_output = BmiResult {
-        bmi: 29.0,
-        category: "Overweight".to_string(),
+        bmi: 22.7,
+        category: "Normal".to_string(),
     };
 
     let test_result: BmiResult = bmi_calculator(test_input);
