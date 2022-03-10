@@ -1,5 +1,8 @@
+extern crate text_io;
 extern crate round;
-use round::{round};
+use text_io::read;
+use round::round;
+use std::io::prelude::*;
 
 pub struct BmiInput {
     h_feet: i32,
@@ -40,7 +43,36 @@ fn bmi_calculator(input: BmiInput) -> BmiResult {
 }
 
 fn main() {
-    println!("Hello, world!");
+    println!("Welcome to the BMI Calculator!");
+    while 1==1 {
+        println!("Please provide the following information:");
+        print!("\tHeight in Feet: ");
+        std::io::stdout().flush().expect("Flush Failed");
+        let h_feet: i32 = read!();
+        print!("\tHeight in Inches: ");
+        std::io::stdout().flush().expect("Flush Failed");
+        let h_inch: i32 = read!();
+        print!("\tWeight in Pounds: ");
+        std::io::stdout().flush().expect("Flush Failed");
+        let weight: f64 = read!();
+        
+        let input = BmiInput {
+            h_feet: h_feet,
+            h_inch: h_inch,
+            weight: weight,
+        };
+
+        let output = bmi_calculator(input);
+
+        println!("\nBMI = {}\nCategory = {}", output.bmi, output.category);
+        println!("Type q to quit, otherwise hit enter");
+        let exit_option: String = read!("{}\n");
+        match exit_option.as_str() {
+            "q" | "Q" => {break}
+            _ => {}
+        };
+        println!("");
+    }
 }
 
 #[cfg(test)]
