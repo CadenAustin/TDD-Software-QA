@@ -18,7 +18,7 @@ pub struct BmiResult {
 
 fn bmi_classify(bmi: f64) -> String {
     match Some(bmi) {
-        Some(x) if x < 18.5 => "Underweight".to_string(),
+        Some(x) if x < 18.6 => "Underweight".to_string(),
         Some(x) if x <= 24.9 => "Normal".to_string(),
         Some(x) if x <= 29.9 => "Overweight".to_string(),
         Some(x) if x >= 30.0 => "Obese".to_string(),
