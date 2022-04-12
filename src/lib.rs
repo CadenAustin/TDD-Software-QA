@@ -6,7 +6,7 @@ extern crate text_io;
 extern crate round;
 use text_io::read;
 use round::round;
-use std::io::prelude::*;
+use std::{io::prelude::*, borrow::Borrow};
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -26,17 +26,38 @@ pub fn greet() {
 }
 
 
-
+#[wasm_bindgen]
 pub struct BmiInput {
     h_feet: i32,
     h_inch: i32,
     weight: f64,
 }
 
+#[wasm_bindgen]
+impl BmiInput {
+    pub fn new(h_feet: i32, h_inch: i32, weight: f64) -> BmiInput {
+        BmiInput { h_feet: h_feet, h_inch: h_inch, weight: weight }
+    }
+}
+
+#[wasm_bindgen]
 #[derive(PartialEq, Debug)]
 pub struct BmiResult {
     bmi: f64,
     category: String,
+}
+
+#[wasm_bindgen]
+impl BmiResult {
+    #[wasm_bindgen(getter)]
+    pub fn bmi(&self) -> f64 {
+        self.bmi
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn category(&self) -> String {
+        self.category.clone()
+    }
 }
 
 fn bmi_classify(bmi: f64) -> String {
@@ -50,7 +71,8 @@ fn bmi_classify(bmi: f64) -> String {
     }
 }
 
-fn bmi_calculator(input: BmiInput) -> BmiResult {
+#[wasm_bindgen]
+pub fn bmi_calculator(input: BmiInput) -> BmiResult {
     let kilos = input.weight * 0.45;
     let height_inchs = (input.h_feet * 12 + input.h_inch) as f64;
     let height_m = height_inchs * 0.025;
@@ -64,37 +86,3 @@ fn bmi_calculator(input: BmiInput) -> BmiResult {
         category: category,
     }
 }
-
-fn main() {
-    println!("Welcome to the BMI Calculator!");
-    while 1==1 {
-        println!("Please provide the following information:");
-        print!("\tHeight in Feet: ");
-        std::io::stdout().flush().expect("Flush Failed");
-        let h_feet: i32 = read!();
-        print!("\tHeight in Inches: ");
-        std::io::stdout().flush().expect("Flush Failed");
-        let h_inch: i32 = read!();
-        print!("\tWeight in Pounds: ");
-        std::io::stdout().flush().expect("Flush Failed");
-        let weight: f64 = read!();
-        
-        let input = BmiInput {
-            h_feet: h_feet,
-            h_inch: h_inch,
-            weight: weight,
-        };
-
-        let output = bmi_calculator(input);
-
-        println!("\nBMI = {}\nCategory = {}", output.bmi, output.category);
-        println!("Type q to quit, otherwise hit enter");
-        let exit_option: String = read!("{}\n");
-        match exit_option.as_str() {
-            "q" | "Q" => {break}
-            _ => {}
-        };
-        println!("");
-    }
-}
-
